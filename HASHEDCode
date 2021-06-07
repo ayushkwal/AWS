@@ -12,5 +12,8 @@ Get Rid of that:
 use doc client
 ![image](https://user-images.githubusercontent.com/70058068/120982342-3ef1fc00-c796-11eb-84ad-94a55195bc8a.png)
 Note:: Here, get and put are used.
-
-
+More Best way ::: 
+![image](https://user-images.githubusercontent.com/70058068/120985386-30591400-c799-11eb-8fc7-031de5c5e83d.png)
+PUT Requests Handling
+ 
+Remember use key in get and use Item in put(not post)
