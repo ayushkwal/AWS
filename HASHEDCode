@@ -17,3 +17,32 @@ More Best way :::
 PUT Requests Handling
  
 Remember use key in get and use Item in put(not post)
+now it's time for api
+6) create API
+![image](https://user-images.githubusercontent.com/70058068/121002251-c7c66300-c7a9-11eb-8e4e-0bf0ff85e703.png)
+![image](https://user-images.githubusercontent.com/70058068/121002494-065c1d80-c7aa-11eb-95bf-e7ecad4dc529.png)
+
+7)   GET REQUEST
+'use strict'
+const AWS = require('aws-sdk');
+
+exports.handler =async (event, context, callback)=> {
+var dynamodb = new AWS.DynamoDB.DocumentClient();
+    
+    var params = {
+        Key: {
+         id:123,
+        }, 
+        TableName: "testing"
+       };
+       try{
+           const data = await dynamodb.get(params).promise();
+           console.log(data);
+       }
+       catch(err){
+           console.log(err);
+       }
+}
+NOTE: Make sure to check use proxy integration
+8) MODIFIED GET REQUEST
+
