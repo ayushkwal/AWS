@@ -196,3 +196,57 @@ exports.handler = async (event)=>{
 
 now we will save this data to dynamo db table which is crucially step.
 create table
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3(); 
+const dynamodb = new AWS.DynamoDB.DocumentClient();
+exports.handler = async (event)=>{
+  const name = 'testbucketforapi';
+  const key = 'users.json';
+  
+  const params = {
+    Bucket:name,
+    Key:key
+  }
+ 
+  
+  try{
+  const data = await s3.getObject(params).promise();
+  const userData = data.Body
+  const userJson = JSON.parse(userData);
+  console.log(userJson);
+  
+  
+  
+   const putparams = {
+    TableName:"testing",
+    Item:{
+      id:Math.floor(Math.random()*(100000-200+1)+200),
+      name:userJson[0].firstname                         //all names will be assigned with firstname of first returned user. To get real names we have to use map method
+    }
+  }
+  console.log(putparams);
+  const putData = await dynamodb.put(putparams).promise();
+  console.log(putData);
+  
+  }
+  catch(err){
+    console.log(err);
+  }
+    
+  }
+  <h4>Now we are using AWS Cognito</h4>
+  it is identity provider.
+  Easy to signin facility.
+  We'll first using user pools which is db and amplify.
+  Cognito uses jwt token.
+  we don't ned to refresh these tokens, it does automatically.
+  
+ Now create cognito
+ 1) Manage User Pools
+
+
+
+
+2) amplify init
+3) 
+ 
