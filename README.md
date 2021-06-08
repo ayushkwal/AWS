@@ -241,12 +241,22 @@ exports.handler = async (event)=>{
   Cognito uses jwt token.
   we don't ned to refresh these tokens, it does automatically.
   
- Now create cognito
- 1) Manage User Pools
-
-
-
-
-2) amplify init
-3) 
+<h2> Now create cognito </h2>
  
+1) nnpm install aws-amplify
+2) amplify init
+3) amplify add auth
+4) ![image](https://user-images.githubusercontent.com/70058068/121204530-91b1dd80-c894-11eb-9935-662e86e9bf5f.png)
+5) 
+6) ![image](https://user-images.githubusercontent.com/70058068/121204897-db9ac380-c894-11eb-83f3-81076ee0d825.png)
+7) 
+8) ![image](https://user-images.githubusercontent.com/70058068/121205143-0be26200-c895-11eb-85d1-003fd6abdbd2.png)
+
+
+ In other words :: Refer https://docs.amplify.aws/lib/auth/getting-started/q/platform/js#option-1-use-pre-built-ui-components
+ 
+ 7) In order to get data like user's id, email,username, Contact number Refer below->
+ 
+ 9) ![image](https://user-images.githubusercontent.com/70058068/121205432-49df8600-c895-11eb-8699-860142c47735.png)
+
+ 11) Reference:https://docs.amplify.aws/lib/auth/manageusers/q/platform/js#account-recovery-verification
