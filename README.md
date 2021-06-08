@@ -260,3 +260,6 @@ exports.handler = async (event)=>{
  9) ![image](https://user-images.githubusercontent.com/70058068/121205432-49df8600-c895-11eb-8699-860142c47735.png)
 
  11) Reference:https://docs.amplify.aws/lib/auth/manageusers/q/platform/js#account-recovery-verification
+
+![image](https://user-images.githubusercontent.com/70058068/121205757-8e6b2180-c895-11eb-8512-c117ff600faa.png)
+
