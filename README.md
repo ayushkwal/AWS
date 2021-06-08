@@ -4,23 +4,31 @@
 3) Lambda (Don't forget to import role)
 4) Connect Table
 5) Making Inline Code
+
 ![image](https://user-images.githubusercontent.com/70058068/120980481-4a442800-c794-11eb-8c5d-deeaae63f192.png)
+
 Here,S is just type of primary key
 Make it more simpler :: Just reduce this : AWS.config.update({region:'us-east-1'}) and also {apiVersion: '2012-08-10'}
 Don't forget to import aws-sdk
 This was just funky json syntax
 Get Rid of that:
 use doc client
+
 ![image](https://user-images.githubusercontent.com/70058068/120982342-3ef1fc00-c796-11eb-84ad-94a55195bc8a.png)
+
 Note:: Here, get and put are used.
 More Best way ::: 
+
 ![image](https://user-images.githubusercontent.com/70058068/120985386-30591400-c799-11eb-8fc7-031de5c5e83d.png)
+
 PUT Requests Handling
  
 Remember use key in get and use Item in put(not post)
 now it's time for api
 6) create API
+7) 
 ![image](https://user-images.githubusercontent.com/70058068/121002251-c7c66300-c7a9-11eb-8e4e-0bf0ff85e703.png)
+
 ![image](https://user-images.githubusercontent.com/70058068/121002494-065c1d80-c7aa-11eb-95bf-e7ecad4dc529.png)
 
 7)   GET REQUEST
@@ -84,21 +92,38 @@ exports.handler = async (event, context) => {
 ;
   return response;
 }
+
 ![image](https://user-images.githubusercontent.com/70058068/121108440-6218bc00-c827-11eb-9883-e430ed25d324.png)
-How flow looks like: ![image](https://user-images.githubusercontent.com/70058068/121108502-7c529a00-c827-11eb-8201-9f4ee00e7032.png)
+
+How flow looks like:
+
+![image](https://user-images.githubusercontent.com/70058068/121108502-7c529a00-c827-11eb-8201-9f4ee00e7032.png)
+
 Note:: You may also need to update IAM Roles 
+
 ![image](https://user-images.githubusercontent.com/70058068/121108729-e10df480-c827-11eb-8587-e297e8301cef.png)
-make new inline policy::![image](https://user-images.githubusercontent.com/70058068/121108887-28948080-c828-11eb-9df3-4f2ec7151fbb.png)
+
+make new inline policy::
+
+![image](https://user-images.githubusercontent.com/70058068/121108887-28948080-c828-11eb-9df3-4f2ec7151fbb.png)
 
 //Now handling post request
 make model in your api then you can configure flow
 Take help of structure: https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html
+
 ![image](https://user-images.githubusercontent.com/70058068/121111977-63e57e00-c82d-11eb-8405-47d8ccf328bb.png)
+
 now in method execution : 
+
 ![image](https://user-images.githubusercontent.com/70058068/121112343-e4a47a00-c82d-11eb-8dd7-5098e0722aab.png)
+
 ![image](https://user-images.githubusercontent.com/70058068/121112364-ecfcb500-c82d-11eb-9193-c1476ecf0dd5.png)
 
-I hope you have copied data: ![image](https://user-images.githubusercontent.com/70058068/121113035-faff0580-c82e-11eb-8ab4-b032c16e8aef.png) . I am removing it.
+I hope you have copied data:
+
+![image](https://user-images.githubusercontent.com/70058068/121113035-faff0580-c82e-11eb-8ab4-b032c16e8aef.png)
+
+. I am removing it.
 'use strict'
 const AWS = require('aws-sdk');
 
@@ -137,6 +162,7 @@ exports.handler = async (event, context) => {
 ;
   return response;
 }
+
 ![image](https://user-images.githubusercontent.com/70058068/121114294-166b1000-c831-11eb-817b-405d4be60bfa.png)
 
 
