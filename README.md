@@ -141,3 +141,32 @@ exports.handler = async (event, context) => {
 
 
 Now, we will integrate s3 bucket
+create S3 bucket
+integrate with lambda
+now we are uploading any json file and will fetch it's data
+like we have created bucket name testforapi and item be users.json  
+use PUT in Triggering else it will fire every time.
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3(); 
+
+exports.handler = async (event)=>{
+  const name = 'testbucketforapi';   //name of api
+  const key = 'users.json';          //name of data
+  
+  const params = {
+    Bucket:name,
+    Key:key
+  }
+  try{
+  const data = await s3.getObject(params).promise();
+  const userData = data.Body.toString();
+  const userJson = JSON.parse(userData);
+  console.log('------------------',userJson)
+  }catch(err){
+    console.log(err);
+  }
+    
+  }
+
+now we will save this data to dynamo db table which is crucially step.
+create table
