@@ -45,4 +45,47 @@ var dynamodb = new AWS.DynamoDB.DocumentClient();
 }
 NOTE: Make sure to check use proxy integration
 8) MODIFIED GET REQUEST
+'use strict'
+const AWS = require('aws-sdk');
+
+AWS.config.update({ region: "us-east-1"});
+console.log('...........................................')
+exports.handler = async (event, context) => {
+  console.log('...........................................')
+  const ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08"});
+  const documentClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1"});
+
+  let responseBody = "";
+  let statusCode = 0;
+  const id = parseInt(event.pathParameters.id);
+
+  const params = {
+    TableName: "testing",
+    Key: {
+      id: id
+    }
+  }
+;
+  try {
+    const data = await documentClient.get(params).promise();
+    responseBody = JSON.stringify(data.Item);
+    statusCode = 200;
+  } catch (err) {
+    responseBody = `Unable to get user data`;
+    statusCode = 403;
+  }
+
+  const response = {
+    statusCode: statusCode,
+   
+    body: responseBody
+  }
+;
+  return response;
+}
+![image](https://user-images.githubusercontent.com/70058068/121108440-6218bc00-c827-11eb-9883-e430ed25d324.png)
+How flow looks like: ![image](https://user-images.githubusercontent.com/70058068/121108502-7c529a00-c827-11eb-8201-9f4ee00e7032.png)
+Note:: You may also need to update IAM Roles 
+![image](https://user-images.githubusercontent.com/70058068/121108729-e10df480-c827-11eb-8587-e297e8301cef.png)
+make new inline policy::![image](https://user-images.githubusercontent.com/70058068/121108887-28948080-c828-11eb-9df3-4f2ec7151fbb.png)
 
