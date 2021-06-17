@@ -84,7 +84,7 @@ functions:
      - http: ANY /
 
 npm run deploy
-you also need to replace all form action = '/submit' to '/production/submit' at all places.
+you also need to replace all form action = '/submit' to 'production/submit' at all places.
 
 
 
