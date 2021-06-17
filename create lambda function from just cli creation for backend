@@ -84,7 +84,17 @@ functions:
      - http: ANY /
 
 npm run deploy
-you also need to replace all form action = '/submit' to 'production/submit' at all places.
+you also need to replace all form action = '/submit' to 'https://3e23hdfh3hi7843njh3jh34j.aws.amazon.com/production/submit' at all places.
 
+
+Setting an API for calling
+![image](https://user-images.githubusercontent.com/70058068/122427052-6757d280-cfae-11eb-9251-c9737a4a440a.png)
+
+![image](https://user-images.githubusercontent.com/70058068/122427163-822a4700-cfae-11eb-9014-5cc94da47d68.png)
+
+![image](https://user-images.githubusercontent.com/70058068/122427236-91a99000-cfae-11eb-8b39-d1c4f299b30e.png)
+
+
+Now your function should work very fine.
 
 
