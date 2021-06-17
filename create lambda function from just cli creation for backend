@@ -98,3 +98,7 @@ Setting an API for calling
 Now your function should work very fine.
 
 
+https://codeburst.io/react-js-api-calls-to-aws-lambda-api-gateway-and-dealing-with-cors-89fb897eb04d may help but I didn't read this.
+twilio blog helped me a lot.
+
+
