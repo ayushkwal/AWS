@@ -1,0 +1,72 @@
+Now, We will create lambda function using just simple command lines.
+As we have created our basic node app.
+
+![image](https://user-images.githubusercontent.com/70058068/122369713-0fa07380-cf7c-11eb-915c-c9f4db4099aa.png)
+
+Firstly you have AWSCLI installed in your system.
+1. Open cmd
+2. aws --version
+3. aws configure
+4. get access key from security credentials.
+5. get secret key from security credentials.
+6. Now, return to vs code terminal and type following commands:
+
+npm install body-parser ejs --save
+
+also suppose you have form in views/index.ejs
+
+<form action="submit" method="post">
+   My best friend is: <input type="text" name="friendName" />
+   <input type="submit" value="Add" />
+</form>
+
+now in app.js which is looking like this::
+
+const bodyParser = require('body-parser');
+
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+app.set('views', 'views');
+
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/', (req, res) => {
+  
+});
+
+app.post('/submit', (req, res) => {
+ 
+});
+
+
+Now, we have app and running on local host and we also configured our aws
+
+Steps to deploy::
+1) npm install serverless --save-dev
+  npm install aws-serverless-express --save
+  make serverless.yml
+  make lambda.js
+  make local.js
+  
+ 2)
+ Inside lambda.js
+ const awsServerlessExpress = require('aws-serverless-express');
+const app = require('./server');
+const server = awsServerlessExpress.createServer(app)
+
+
+module.exports.universal = (event, context) => awsServerlessExpress.proxy(server, event, context);
+ 
+replace server.listen........       with           module.exports = app;
+
+
+local.js
+const app = require('./src/server.js');
+const port = process.env.PORT || 8000;
+
+// Server
+app.listen(port, () => {
+   console.log(`Listening on: http://localhost:${port}`);
+});
+
