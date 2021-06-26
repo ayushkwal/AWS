@@ -1,0 +1,3 @@
+# you should install npm install -g serverless otherwise npm insall serverless won't worrk.
+# npm install serverless-offline
+# sls offline start
