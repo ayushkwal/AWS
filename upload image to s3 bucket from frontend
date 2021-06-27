@@ -1,0 +1,136 @@
+//In this tutorial we are going to upload images directly to s3 from frontend.
+let's see how to do this
+
+//in app.js
+app.get('s3URL',()=>{})
+make s3.js ::connect to s3 bucket to our app
+
+make sure to import aws-sdk
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import dotenv from 'dotenv'
+import aws from 'aws-sdk'
+import crypto from 'crypto'
+import { promisify } from "util"
+const randomBytes = promisify(crypto.randomBytes)
+
+dotenv.config()
+
+const region = "us-west-2"
+const bucketName = "direct-upload-s3-bucket-thing"
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+
+const s3 = new aws.S3({
+  region,
+  accessKeyId,
+  secretAccessKey,
+  signatureVersion: 'v4'
+})
+
+export async function generateUploadURL() {
+  const rawBytes = await randomBytes(16)
+  const imageName = rawBytes.toString('hex')
+
+  const params = ({
+    Bucket: bucketName,
+    Key: imageName,
+    Expires: 60
+  })
+  
+  const uploadURL = await s3.getSignedUrlPromise('putObject', params)
+  return uploadURL
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------
+//Create bucket and add bucket policy
+![image](https://user-images.githubusercontent.com/70058068/123543233-12b11600-d76b-11eb-8187-22015111c243.png)
+//create cors policy
+
+![image](https://user-images.githubusercontent.com/70058068/123543296-6885be00-d76b-11eb-9372-585e69f7f893.png)
+
+//create IAM policy
+//Create IAM users
+
+![image](https://user-images.githubusercontent.com/70058068/123543419-f366b880-d76b-11eb-88c4-5dcd125ccfea.png)
+![image](https://user-images.githubusercontent.com/70058068/123543428-04afc500-d76c-11eb-886b-bb55f3304748.png)
+![image](https://user-images.githubusercontent.com/70058068/123543438-11ccb400-d76c-11eb-9974-0a589c8d75ba.png)
+
+//Now Users
+simple
+
+//Now we will store our access key and secret key in .env file
+eg:: password:''
+     id:''
+     
+ we will access them as like process.env.id ; process.env.password
+ but make sure to install and import dotenv
+ Also use, dotenv.config()
+ 
+ 
+ 
+ 
+ Inside S3.js
+ export async function generateUploadURL() {
+  
+  const imageName = 'RANdom ImagE UrL WiLl bE gEneRaTe'
+  
+  const params = ({
+  Bucket:bucketname,
+  Key:imageName,
+  Expires:60
+  })
+ 
+  const uploadURL = await s3.getSignedUrlPromise('putObject',params)
+  return uploadURL
+ }
+ 
+ //now in order to generate unique image URl
+ import crypto from 'crypto'
+ import {promisify} from "util"
+ 
+ --------------------------------------------------
+|   const rawBytes = await randomBytes(16)         |
+|   const imageName = rawBytes.toString('hex')     |
+ --------------------------------------------------
+ 
+ 
+ import {generateUploadURL} from './s3.js'
+ app.get('/s3Url',async (req,res)=>{
+  const url = await generateUploadURL()
+  res.send({url})
+ })
+ 
+ //Also write line:: const randomBytes = promisify(crypto.randomBytes)
+ 
+//Now you will surely get link of image in your console
+
+//But your s3 bucket don't have any Image inside it
+![image](https://user-images.githubusercontent.com/70058068/123545359-324d3c00-d775-11eb-873d-ee3f9919b0dc.png)
+
+As in Form.js :: where you are sending image to upload
+
+
+-------------------------------------------------------------------------------------------------------
+//This is also case of getting data from GET request---------------------------------
+const {url} = await fetch('/s3URL').then((res)=>res.json());
+console.log(url);
+
+      whereas in serverside we uses app.get('/s3URL',async(req,res)=>{
+                                      const url = await generateUploadURL();
+                                      res.send({url})
+                                      })
+-------------------------------------------------------------------------------------------------------
+Now Further,
+await fetch(url,{
+method:"PUT",
+headers:{
+  "Content-Type":"multipart/form-data"
+},
+body:localimageLink
+})
+const URLFetched = url.split('?')[0]
+console.log(URLFetched)
+
+
+
+
