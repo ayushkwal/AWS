@@ -1,4 +1,5 @@
 //In this tutorial we are going to upload images directly to s3 from frontend.
+//full code below line 137. refer it
 let's see how to do this
 
 //in app.js
@@ -132,5 +133,145 @@ const URLFetched = url.split('?')[0]
 console.log(URLFetched)
 
 
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+//Full code::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+.ejs form file::::::::::::::::::::::::::::::::::::::::::::::::
+ const form = document.querySelector('form');
+  form.addEventListener('submit', async (e) => {
+    console.log('hey')
+    e.preventDefault()
+    console.log(e.target.email.value, e.target.email.value, e.target.email.value, e.target.image.value)
+    // get secure url from our server
+    const { url } = await fetch("/s3Url").then(res => res.json())
+    console.log(url)
+
+    // post the image direclty to the s3 bucket
+    const imglink = document.getElementById('imglink');
+    const file = imglink.files[0]
+    console.log('file is', file)
+    await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      body: file
+    })
+
+    const imageUrl = url.split('?')[0]
+    console.log(imageUrl,'is url of image')
+
+
+    // post requst to my server to store any extra data
+  
+  const img = document.createElement("img")
+  img.src = imageUrl
+  document.body.appendChild(img)
+
+
+  })
+  
+  //app.js:::::::::::::::::::::::::::::::::::::::::
+app.get('/s3Url', async (req, res) => {
+  console.log('getting url')
+    const url = await generateUploadURL()
+    console.log('new url is :', url)
+    res.send({url})
+  })
+  
+  
+  //s3.js::::::::::::::::::::::::::::::::::::::::::::
+  const dotenv = require('dotenv')
+const aws = require('aws-sdk')
+const crypto = require('crypto')
+const { promisify } = require("util")
+const randomBytes = promisify(crypto.randomBytes)
+
+dotenv.config()
+
+
+// module.exports.generateUploadURL = async()=>{
+//   console.log('reached here')
+
+  const region = "us-east-1"
+  const bucketName = "localindiyaadrtytytyrty2"
+  const accessKeyId = "Ahytrtyrtyrtyty"
+  const secretAccessKey = "ZgQbhghhhhhhhhhhhhhhh"
+  
+  
+  const s3 = new aws.S3({
+    region,
+    accessKeyId,
+    secretAccessKey,
+    signatureVersion: 'v4'
+  })
+
+module.exports.generateUploadURL = async()=>{
+  console.log('reached here')
+  const rawBytes = await randomBytes(16)
+  const imageName = rawBytes.toString('hex')
+
+  const params = ({
+    Bucket: bucketName,
+    Key: imageName,
+    Expires: 60
+
+  })
+  
+  const uploadURL = await s3.getSignedUrlPromise('putObject', params)
+  return uploadURL
+}
+
+
+
+//Bucket PolicyL::::::::::::::::::::::::::::::::::::::::::::::
+{
+    "Version": "2012-10-17",
+    "Id": "Policy1624879728061",
+    "Statement": [
+        {
+            "Sid": "Stmt1624879715635",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": "arn:aws:s3:::localindiyaad2/*"
+        }
+    ]
+}
+
+
+//Bucket CORS Policy::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "PUT",
+            "POST",
+            "DELETE",
+            "GET"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": []
+    }
+]
+
+
+
+//Set public access to off of read and write
+
+
+
+//IAM Policy all S# bucket Administration access
 
 
