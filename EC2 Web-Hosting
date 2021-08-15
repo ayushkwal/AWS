@@ -1,3 +1,5 @@
 Now here we are going to create new aws-ec2 instance
 But an error occured that public ipv4 is not visible.
 resolve::::::
+while creating default public assign is disable you need to enable it..
+
