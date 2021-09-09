@@ -1,0 +1,22 @@
+Let’s start by install Nginx in our instance, and we do that by running the following:
+sudo apt-get install nginx
+nginx -v
+
+Once we verify that Nginx is installed in our instance, we can configure it to work as a reverse-proxy.
+Let’s edit the default file which exists in /etc/nginx/sites-enabled/default
+server {
+   listen         80 default_server;
+   listen         [::]:80 default_server;
+   server_name    localhost;
+   root           /usr/share/nginx/html;
+location / {
+       proxy_pass http://127.0.0.1:3000;
+       proxy_http_version 1.1;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection 'upgrade';
+       proxy_set_header Host $host;
+       proxy_cache_bypass $http_upgrade;
+   }
+}
+After saving, we need to restart the Nginx service and we do that by running the following command:
+sudo service nginx restart
