@@ -1,0 +1,65 @@
+First of all learn that it is very easy to load certificate.
+Steps:
+https://medium.com/@marcosantonocito/steps-to-install-a-go-daddy-ssl-certificate-on-nginx-on-ubuntu-14-04-ff942b9fd7ff
+
+SSL certificate is nothing much. It is done in following steps:
+1) Generate from GoDaddy
+
+Generate a CSR and Private Key
+Prior to purchasing a cert, you need to generate a private key, and a CSR file (Certificate Signing Request). You’ll be asked for the content of the CSR file when ordering the certificate.
+Firstly, we should create a folder to put all our ssl certificates:
+mkdir /etc/nginx/ssl
+cd /etc/nginx/ssl
+Then we have to generate our private key, called example.com.key, and a CSR, called example.com.csr. Run this command (replace the example.com with the name of your domain).
+openssl req -newkey rsa:2048 -nodes -keyout example.com.key -out example.com.csr
+At this point, you will be prompted for several lines of information that will be included in your certificate request. The most important part is the Common Name field which should match the name that you want to use your certificate with — for example, example.com, www.example.com, or (for a wildcard certificate request) *.example.com.
+Here’s an example:
+Country Name (2 letter code) [AU]: IT
+State or Province Name (full name) [Some-State]: Venezia
+Locality Name (eg, city) []: Venezia
+Organization Name (eg, company)[Internet Widgits Pty Ltd]:My Company
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:example.com
+Email Address []:marco@example.com
+This will generate you two files:
+example.com.key
+Your Private key. You’ll need this later to configure NGINX.
+example.com.csr
+Your CSR file.
+Now you can purchase your certificate. You will need to copy and paste your example.com.csr certificate to send your request for a SSL Certificate. Use this command to print your file:
+cat example.com.csr
+Download Certificate
+GoDaddy now verifies that you control the domain. You will receive an email as soon as your SSL certificate will be issued with a link to download it. Open that link.
+Select Apache from the Server type dropdown menu and download the ZIP archive. It should contain two .crt files:
+Your SSL Certificate with a random name (Ex. 93rfs8dhf834hts.crt)
+The GoDaddy intermediate certificate bundle (gd_bundle-g2-g1.crt)
+Rename the first one to example.com.crt and the second one to intermediate.crt.
+The certificate is now ready to be installed on your web server.
+Install Certificate On Web Server
+Upload example.com.crt and intermediate.crt inside the folder you’ve created before:
+cd /etc/nginx/ssl
+With Nginx, if your CA included an intermediate certificate, you must create a single chained certificate file that contains your certificate and the CA’s intermediate certificates.
+You can use this command to create a combined file called example.com.chained.crt:
+cat example.com.crt intermediate.crt > example.com.chained.crt
+And now you should change the access permission to this folder:
+cd /etc/nginx
+sudo chmod -R 600 ssl/
+To complete the configuration you have to make sure your NGINX config points to the right cert file and to the private key you generated earlier. Open it:
+sudo vi /etc/nginx/sites-available/example.com
+And change it:
+server {
+    ...
+    listen 443;
+    server_name example.com;
+ 
+    ssl on;
+    ssl_certificate /etc/nginx/ssl/example.com.chained.crt;
+    ssl_certificate_key /etc/nginx/ssl/example.com.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2; 
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+    ...
+}
+Save, quit and now restart NGINX to load the new configuration and enable TLS/SSL over HTTPS with your GoDaddy Certificate.
+sudo service nginx restart
+Test it out by accessing your site via HTTPS, e.g. https://example.com.
