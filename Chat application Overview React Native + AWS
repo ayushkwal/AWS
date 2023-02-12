@@ -1,0 +1,110 @@
+Here's the complete code for a simple React Native chat application that uses WebSockets and communicates with an AWS Lambda function running the WebSocket server:
+
+React Native client:
+
+import React, { useState, useEffect } from "react";
+import { View, TextInput, Button, Text } from "react-native";
+
+const ws = new WebSocket("ws://<your-api-endpoint>");
+
+const Chat = () => {
+  const [message, setMessage] = useState("");
+  const [chat, setChat] = useState([]);
+
+  useEffect(() => {
+    ws.onopen = () => {
+      console.log("WebSocket connection opened");
+    };
+
+    ws.onmessage = (event) => {
+      setChat((prevChat) => [...prevChat, event.data]);
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error", error);
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  const sendMessage = () => {
+    ws.send(message);
+    setMessage("");
+  };
+
+  return (
+    <View>
+      <TextInput
+        value={message}
+        onChangeText={setMessage}
+        placeholder="Enter message"
+      />
+      <Button onPress={sendMessage} title="Send" />
+      {chat.map((message, index) => (
+        <Text key={index}>{message}</Text>
+      ))}
+    </View>
+  );
+};
+
+export default Chat;
+
+
+
+
+
+
+
+
+
+AWS Lambda function:
+
+const WebSocket = require("ws");
+
+exports.handler = async (event, context) => {
+  const wss = new WebSocket.Server({
+    noServer: true,
+  });
+
+  return {
+    statusCode: 200,
+    body: "WebSocket server started",
+    headers: {
+      "Content-Type": "text/plain",
+      "Access-Control-Allow-Origin": "*",
+    },
+  };
+
+  wss.on("connection", (ws) => {
+    console.log("Client connected");
+
+    ws.on("message", (message) => {
+      console.log(`Received message: ${message}`);
+      wss.clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(message);
+        }
+      });
+    });
+
+    ws.on("close", () => {
+      console.log("Client disconnected");
+    });
+  });
+};
+
+
+
+
+
+
+
+Note that you'll need to replace <your-api-endpoint> in the React Native code with the URL of the AWS API Gateway or ELB endpoint that is fronting the AWS Lambda function.
+
+This code provides a basic starting point for building a chat application using React Native and WebSockets. You'll likely want to add additional features and error handling, but this should give you a good foundation to start from.
